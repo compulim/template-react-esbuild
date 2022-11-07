@@ -15,14 +15,12 @@ jobs:
           git config user.email "${{ format('@{0}', github.actor) }}"
           git config user.name "${{ format('@{0}', github.actor) }}"
 
-      - run: |
+      - name: Show README.scaffold.md
+        run: |
           mv README.scaffold.md README.md
           git add --all
           git commit --message "Showing README.scaffold.md"
           git push --set-upstream origin ${{ github.event.inputs.target-branch }}
-
-      - name: Show README.post.md
-        run: mv README.post.md README.md
 
       - name: Run `npm init`
         run: npm init --yes
@@ -39,9 +37,7 @@ jobs:
           npm audit fix
 
       - name: Show README.post.md
-        run: |
-          rm README.md
-          mv README.post.md README.md
+        run: mv README.post.md README.md
 
       - name: Commit and push
         run: |
