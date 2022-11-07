@@ -3,7 +3,7 @@ import React from 'react';
 const App = () => {
   return (
     <h1>
-      Hello, World from <code>template-react-esbuild</code>!
+      Hello, World!
     </h1>
   );
 };
