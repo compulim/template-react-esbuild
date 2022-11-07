@@ -43,7 +43,7 @@ jobs:
 
       - name: Commit and push
         run: |
-          rm ${{ github.workflow }}
+          rm .github/workflows/set-up-scaffold.yml
           git add --all
           git commit --message "Initial `template-react-esbuild` scaffold"
           git push --set-upstream origin ${{ github.event.inputs.target-branch }}
