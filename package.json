@@ -1,0 +1,16 @@
+{
+  "name": "react-esbuild-app",
+  "version": "0.0.0-0",
+  "private": true,
+  "keywords": [
+    "template-react-esbuild"
+  ],
+  "scripts": {
+    "build": "concurrently --kill-others \"npm run build:*\"",
+    "build:esbuild": "esbuild --bundle --outfile=./public/static/js/main.js src/index.tsx",
+    "build:typescript": "tsc -p ./src/tsconfig.json",
+    "start": "concurrently --kill-others \"npm run start:*\"",
+    "start:esbuild": "npm run build:esbuild -- --servedir=./public",
+    "start:typescript": "npm run build:typescript -- --watch"
+  }
+}

@@ -1,0 +1,51 @@
+on:
+  push:
+    branches: ['main']
+
+jobs:
+  setup:
+    if: ${{ github.run_number == 1 && github.repository != 'compulim/template-react-esbuild' }}
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Configure user profile
+        run: |
+          git config user.email "${{ format('@{0}', github.actor) }}"
+          git config user.name "${{ format('@{0}', github.actor) }}"
+
+      - run: |
+          mv README.scaffold.md README.md
+          git add --all
+          git commit --message "Showing README.scaffold.md"
+          git push --set-upstream origin ${{ github.event.inputs.target-branch }}
+
+      - name: Show README.post.md
+        run: mv README.post.md README.md
+
+      - name: Run `npm init`
+        run: npm init --yes
+
+      - name: Run `npm install`
+        run: |
+          npm install --save react react-dom
+          npm install --save-dev concurrently esbuild typescript @types/react @types/react-dom
+
+      - name: Run `npm audit`
+        continue-on-error: true
+        run: |
+          npm install --package-lock-only
+          npm audit fix
+
+      - name: Show README.post.md
+        run: |
+          rm README.md
+          mv README.post.md README.md
+
+      - name: Commit and push
+        run: |
+          rm ${{ github.workflow }}
+          git add --all
+          git commit --message "Initial `template-react-esbuild` scaffold"
+          git push --set-upstream origin ${{ github.event.inputs.target-branch }}
