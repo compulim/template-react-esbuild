@@ -24,9 +24,6 @@ jobs:
           git commit --message "Showing README.scaffold.md"
           git push --set-upstream origin ${{ github.event.inputs.target-branch }}
 
-      - name: Run `npm init`
-        run: npm init --yes
-
       - name: Run `npm install`
         run: |
           npm install --save react react-dom
