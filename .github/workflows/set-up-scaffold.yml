@@ -32,11 +32,9 @@ jobs:
           npm install --save react react-dom
           npm install --save-dev concurrently esbuild typescript @types/react @types/react-dom
 
-      - name: Run `npm audit`
+      - name: Run `npm audit fix`
         continue-on-error: true
-        run: |
-          npm install --package-lock-only
-          npm audit fix
+        run: npm audit fix
 
       - name: Show README.post.md
         run: mv README.post.md README.md
