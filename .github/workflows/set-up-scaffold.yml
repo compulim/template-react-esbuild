@@ -1,3 +1,5 @@
+name: Set up scaffold
+
 on:
   push:
     branches: ['main']
