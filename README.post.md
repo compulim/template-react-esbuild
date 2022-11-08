@@ -1,11 +1,19 @@
-# `template-react-esbuild` on GitHub Actions
+## Your repository is almost ready
 
-## Next steps
+There are few more steps to enable GitHub Pages and continuous deployment.
 
 1. Enable GitHub Pages
-   1. Navigate to [GitHub Pages settings](../../settings/pages)
-   1. In the "Source" field, change to "GitHub Actions"
-1. [Modify `App.tsx` to trigger the first deployment](../../edit/main/src/ui/App.tsx)
-1. (Optional) [Set up Codespaces prebuild](../../settings/codespaces/prebuild_configurations/new)
+   1. Navigate to [Pages settings](../../settings/pages)
+   1. In the "Source" field, select "GitHub Actions"
+1. Trigger the deployment
+   1. [Modify and commit `App.tsx` to main](../../edit/main/src/ui/App.tsx)
+   1. Check deployment workflow at [![Deploy static content to Pages](../../actions/workflows/static.yml/badge.svg)](../../actions/workflows/static.yml)
 
-[![Deploy to GitHub Pages](../../actions/workflows/static.yml/badge.svg)](../../actions/workflows/static.yml)
+### GitHub Codespaces
+
+You can set up prebuild to speed up Codespaces creation. The prebuilt image will pre-install all dependencies under `/node_modules/` with initial build.
+
+1. [Set up Codespaces prebuilds](../../settings/codespaces/prebuild_configurations/new)
+   1. Check prebuild workflow at [![Codespaces Prebuilds](../../actions/workflows/codespaces/create_codespaces_prebuilds/badge.svg)](../../actions/workflows/codespaces/create_codespaces_prebuilds)
+
+Once the prebuild action is completed, you can create a new prebuilt codespace.
