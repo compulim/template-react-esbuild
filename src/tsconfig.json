@@ -4,7 +4,7 @@
     "declarationDir": "../lib/types/",
     "emitDeclarationOnly": true,
     "esModuleInterop": true,
-    "jsx": "react",
+    "jsx": "react-jsx",
     "preserveWatchOutput": true,
     "skipLibCheck": true,
     "strict": true
