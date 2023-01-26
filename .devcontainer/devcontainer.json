@@ -2,5 +2,5 @@
   "forwardPorts": [8000],
   "image": "mcr.microsoft.com/devcontainers/typescript-node",
   "remoteUser": "node",
-  "updateContentCommand": "npm ci && npm run build"
+  "updateContentCommand": "npm install && npm run build"
 }
