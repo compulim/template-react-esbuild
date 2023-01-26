@@ -7,6 +7,9 @@ on:
 jobs:
   setup:
     if: ${{ github.run_number == 1 && github.repository != 'compulim/template-react-esbuild' }}
+    permissions:
+      actions: write
+      contents: write
     runs-on: ubuntu-latest
 
     steps:
