@@ -5,8 +5,11 @@
     "emitDeclarationOnly": true,
     "esModuleInterop": true,
     "jsx": "react-jsx",
+    "lib": ["DOM", "ESNext", "WebWorker"],
+    "moduleResolution": "NodeNext",
     "preserveWatchOutput": true,
     "skipLibCheck": true,
-    "strict": true
+    "strict": true,
+    "target": "ESNext"
   }
 }
