@@ -27,10 +27,18 @@ jobs:
           git commit --message "Showing README.scaffold.md"
           git push --set-upstream origin ${{ github.event.inputs.target-branch }}
 
-      - name: Run `npm install`
+      - id: npm-install
+        name: Run `npm install`
         run: |
           npm install --save react react-dom
-          npm install --save-dev concurrently esbuild typescript @types/react @types/react-dom
+          npm install --save-dev concurrently esbuild eslint eslint-plugin-prettier eslint-plugin-react typescript @types/react @types/react-dom @typescript-eslint/eslint-plugin @typescript-eslint/parser
+          echo react-version=`npm ls react --json | jq -r '.dependencies.react.version'` > $GITHUB_OUTPUT
+
+      - name: Set React version in `.eslintrc.react.yml` to ${{ steps.npm-install.outputs.react-version }}
+        run: |
+          docker run -i --rm mikefarah/yq '.settings.react.version = "${{ steps.npm-install.outputs.react-version }}"' < ./.eslintrc.react.yml > ./.eslintrc.react.yml.tmp
+          mv .eslintrc.react.yml.tmp .eslintrc.react.yml
+          ls .eslintrc.react.yml
 
       - name: Run `npm audit fix`
         continue-on-error: true

@@ -1,12 +1,11 @@
 {
   "compilerOptions": {
     "declaration": true,
-    "declarationDir": "../lib/types/",
-    "emitDeclarationOnly": true,
     "esModuleInterop": true,
     "jsx": "react-jsx",
     "lib": ["DOM", "ESNext", "WebWorker"],
     "moduleResolution": "NodeNext",
+    "noEmit": true,
     "preserveWatchOutput": true,
     "skipLibCheck": true,
     "strict": true,
