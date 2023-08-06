@@ -6,7 +6,7 @@ There are few more steps to enable GitHub Pages and continuous deployment.
    1. Navigate to [Pages settings](../../settings/pages)
    1. In the "Source" field, select "GitHub Actions"
 1. Trigger the deployment
-   1. [Modify and commit `App.tsx` to main](../../edit/main/src/app/ui/App.tsx)
+   1. [Modify and commit `App.tsx` to the `main` branch](../../edit/main/src/app/ui/App.tsx)
    1. Check deployment workflow at [![Deploy static content to Pages](../../actions/workflows/static.yml/badge.svg)](../../actions/workflows/static.yml)
 
 ### GitHub Codespaces
