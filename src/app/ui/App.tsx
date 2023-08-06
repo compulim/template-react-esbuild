@@ -1,5 +1,5 @@
-const App = () => {
-  return <h1>Hello, World!</h1>;
-};
+import { memo } from 'react';
 
-export default App;
+export default memo(function App() {
+  return <h1>Hello, World!</h1>;
+});
