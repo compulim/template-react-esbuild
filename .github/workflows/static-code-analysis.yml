@@ -10,7 +10,7 @@ on:
 
 jobs:
   static-code-analysis:
-    if: ${{ github.run_number > 1 }}
+    if: ${{ github.run_number > 1 && github.repository != 'compulim/template-react-esbuild' }}
     name: Static code analysis
     runs-on: ubuntu-latest
     steps:
