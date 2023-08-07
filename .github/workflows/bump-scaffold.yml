@@ -1,0 +1,87 @@
+name: Bump scaffold
+
+on:
+  workflow_dispatch: {}
+
+jobs:
+  bump-scaffold:
+    name: Bump scaffold
+    permissions:
+      contents: write
+      pull-requests: write
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out current
+        uses: actions/checkout@v3
+        with:
+          path: ./current
+
+      - env:
+          GH_TOKEN: ${{ github.token }}
+        id: get-template-repo
+        name: Get template repo
+        run: |
+          cd ./current/
+          echo repo=`gh repo view --json templateRepository --jq '.templateRepository.owner.login + "/" + .templateRepository.name'` >> $GITHUB_OUTPUT
+
+      - name: Check out template
+        uses: actions/checkout@v3
+        with:
+          path: ./template
+          repository: ${{ steps.get-template-repo.outputs.repo }}
+
+      - id: create-branch
+        name: Create branch
+        run: |
+          BRANCH_NAME=bump-scaffold-${{ github.run_number }}
+
+          cd ./current/
+          git checkout -b $BRANCH_NAME
+          echo branch-name=$BRANCH_NAME >> $GITHUB_OUTPUT
+
+      - name: Copy scaffold files
+        run: rsync ./template/* ./current/ --exclude=.git/ --exclude=.github/workflows/set-up-scaffold.yml --exclude=package.json --exclude=public/ --exclude=README.* --exclude=src/ --include=src/tsconfig.json
+
+      - name: Patch package.json/scripts
+        run: |
+          cat ./current/package.json | jq --argfile templateJSON ./template/package.json -r '.scripts = $templateJSON.scripts' > ./current/package.json.tmp
+          mv ./current/package.json.tmp ./current/package.json
+          cat ./current/package.json
+
+      - id: get-changes
+        name: Get changes
+        run: |
+          cd ./current/
+
+          if [[ `git ls-files --deleted --modified --others | wc -l` -gt 0 ]]
+          then
+            echo has-changes=true >> $GITHUB_OUTPUT
+          fi
+
+      - if: ${{ steps.get-changes.outputs.has-changes == 'true' }}
+        name: Commit and push
+        run: |
+          cd ./current
+
+          git config user.email "${{ format('@{0}', github.actor) }}"
+          git config user.name "${{ format('@{0}', github.actor) }}"
+
+          git commit -a -m "Bump scaffold"
+          git push -u origin ${{ steps.create-branch.outputs.branch-name }}
+
+          echo Branch created at [\`${{ steps.create-branch.outputs.branch-name }}\`]\(${{ github.server }}/${{ github.repository }}/compare/${{ steps.create-branch.outputs.branch-name }}?expand=1\). >> $GITHUB_STEP_SUMMARY
+
+      - env:
+          GH_TOKEN: ${{ github.token }}
+        if: ${{ steps.get-changes.outputs.has-changes == 'true' }}
+        name: Create pull request
+        run: |
+          cd ./current
+
+          URL=`gh pr create --fill --repo ${{ github.repository }} || true` >> $GITHUB_OUTPUT
+
+          if [[ ! -z "$URL" ]]
+          then
+            echo Pull request created at $URL. >> $GITHUB_STEP_SUMMARY
+          fi
