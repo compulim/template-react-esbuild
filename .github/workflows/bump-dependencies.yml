@@ -24,7 +24,7 @@ jobs:
       - id: create-branch
         name: Create branch
         run: |
-          BRANCH_NAME=bump-deps-${{ github.run_number }}
+          BRANCH_NAME=bot/bump-deps/${{ github.run_number }}
 
           git checkout -b $BRANCH_NAME
           echo branch-name=$BRANCH_NAME >> $GITHUB_OUTPUT
