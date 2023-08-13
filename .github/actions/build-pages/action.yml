@@ -6,7 +6,6 @@ runs:
   using: composite
   steps:
     - name: Setup Pages
-      shell: bash
       uses: actions/configure-pages@v2
     - name: Clean install
       run: npm ci
@@ -15,7 +14,6 @@ runs:
       run: npm run build
       shell: bash
     - name: Upload artifact
-      shell: bash
       uses: actions/upload-pages-artifact@v1
       with:
         path: ./public
