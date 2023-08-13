@@ -8,6 +8,7 @@ inputs:
   latest:
     default: false
     description: Install latest version
+    type: boolean
   path:
     default: .
     description: Working directory
