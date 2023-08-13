@@ -28,6 +28,8 @@ jobs:
           git push --set-upstream origin ${{ github.event.inputs.target-branch }}
 
       - uses: ./.github/actions/install-default-deps
+        with:
+          latest: true
 
       - name: Show README.post.md
         run: mv README.post.md README.md

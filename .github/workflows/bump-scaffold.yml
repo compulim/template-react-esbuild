@@ -9,7 +9,13 @@ name: Bump scaffold
 #   - workflows: write
 
 on:
-  workflow_dispatch: {}
+  workflow_dispatch:
+    inputs:
+      exact-prod:
+        default: false
+        description: Install exact version for production dependencies
+        required: true
+        type: boolean
 
 jobs:
   bump-scaffold:
@@ -64,6 +70,11 @@ jobs:
           cat ./current/package.json | jq --argfile templateJSON ./template/package.json -r '.scripts = $templateJSON.scripts' > ./current/package.json.tmp
           mv ./current/package.json.tmp ./current/package.json
           cat ./current/package.json
+
+      - uses: ./.github/actions/install-default-deps
+        with:
+          exact-prod: ${{ inputs.exact-prod }}
+          path: ./current/
 
       - id: get-changes
         name: Get changes

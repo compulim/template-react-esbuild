@@ -32,6 +32,7 @@ jobs:
       - uses: ./.github/actions/install-default-deps
         with:
           exact-prod: ${{ inputs.exact-prod }}
+          latest: true
 
       - env:
           BUMP_DEV_OPTIONS: ''

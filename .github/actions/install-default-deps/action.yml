@@ -5,33 +5,45 @@ inputs:
   exact-prod:
     default: false
     description: Install exact version for production dependencies
-    required: true
+  latest:
+    default: false
+    description: Install latest version
+  path:
+    default: .
+    description: Working directory
 
 runs:
+  env:
+    VERSION_TAG=${{ inputs.latest && '@latest' || '' }}
   using: composite
   steps:
     - id: prepare
       name: Prepare
       run: echo has-eslint=`if [ -f ./.eslintrc.react.yml ]; then echo true; else echo false; fi` >> $GITHUB_OUTPUT
       shell: bash
+      working-directory: ${{ inputs.path }}
 
     - name: Run npm install for production
-      run: npm install --save react@latest react-dom@latest
+      run: npm install --save react${{ env.VERSION_TAG }} react-dom${{ env.VERSION_TAG }}
       shell: bash
+      working-directory: ${{ inputs.path }}
 
     - name: Run npm install for development
-      run: npm install --save-dev ${{ inputs.exact-prod && '--save-exact' || '' }} concurrently@latest esbuild@latest eslint@latest eslint-plugin-prettier@latest eslint-plugin-react@latest typescript@latest @types/react@latest @types/react-dom@latest @typescript-eslint/eslint-plugin@latest @typescript-eslint/parser@latest
+      run: npm install --save-dev ${{ inputs.exact-prod && '--save-exact' || '' }} concurrently${{ env.VERSION_TAG }} esbuild${{ env.VERSION_TAG }} eslint${{ env.VERSION_TAG }} eslint-plugin-prettier${{ env.VERSION_TAG }} eslint-plugin-react${{ env.VERSION_TAG }} typescript${{ env.VERSION_TAG }} @types/react${{ env.VERSION_TAG }} @types/react-dom${{ env.VERSION_TAG }} @typescript-eslint/eslint-plugin${{ env.VERSION_TAG }} @typescript-eslint/parser${{ env.VERSION_TAG }}
       shell: bash
+      working-directory: ${{ inputs.path }}
 
     - continue-on-error: true
       name: Run npm audit fix
       run: npm audit fix
       shell: bash
+      working-directory: ${{ inputs.path }}
 
     - id: get-versions
       name: Get versions
       run: echo react-version=`npm ls react --json | jq -r '.dependencies.react.version'` >> $GITHUB_OUTPUT
       shell: bash
+      working-directory: ${{ inputs.path }}
 
     - if: ${{ steps.prepare.outputs.has-eslint == 'true' }}
       name: Set React version in `.eslintrc.react.yml` to ${{ steps.get-versions.outputs.react-version }}
@@ -40,3 +52,4 @@ runs:
         mv .eslintrc.react.yml.tmp .eslintrc.react.yml
         ls .eslintrc.react.yml
       shell: bash
+      working-directory: ${{ inputs.path }}
