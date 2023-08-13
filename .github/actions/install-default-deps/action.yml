@@ -14,7 +14,7 @@ inputs:
 
 runs:
   env:
-    VERSION_TAG=${{ inputs.latest && '@latest' || '' }}
+    VERSION_TAG: ${{ inputs.latest && '@latest' || '' }}
   using: composite
   steps:
     - id: prepare
