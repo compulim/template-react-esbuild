@@ -1,14 +1,3 @@
 {
-  "compilerOptions": {
-    "declaration": true,
-    "esModuleInterop": true,
-    "jsx": "react-jsx",
-    "lib": ["DOM", "ESNext", "WebWorker"],
-    "moduleResolution": "NodeNext",
-    "noEmit": true,
-    "preserveWatchOutput": true,
-    "skipLibCheck": true,
-    "strict": true,
-    "target": "ESNext"
-  }
+  "extends": "./tsconfig.default.json"
 }

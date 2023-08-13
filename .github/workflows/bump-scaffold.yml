@@ -41,7 +41,7 @@ jobs:
           echo branch-name=$BRANCH_NAME >> $GITHUB_OUTPUT
 
       - name: Copy scaffold files
-        run: rsync ./template/* ./current/ --exclude=.git/ --exclude=.github/workflows/set-up-scaffold.yml --exclude=package.json --exclude=public/ --exclude=README.* --exclude=src/ --include=src/tsconfig.json
+        run: rsync ./template/* ./current/ --exclude=.git/ --exclude=.gitignore --exclude=.github/workflows/set-up-scaffold.yml --exclude=.eslintrc.yml --exclude=package.json --exclude=public/ --exclude=README.* --exclude=src/ --include=src/tsconfig.json
 
       - name: Patch package.json/scripts
         run: |
