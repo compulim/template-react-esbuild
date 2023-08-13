@@ -40,9 +40,3 @@ runs:
         mv .eslintrc.react.yml.tmp .eslintrc.react.yml
         ls .eslintrc.react.yml
       shell: bash
-
-    - name: Summary
-      run: |
-        echo \`\`\`json >> $GITHUB_STEP_SUMMARY
-        cat package.json | jq '{ dependencies: .dependencies, devDependences: .devDependencies }' >> $GITHUB_STEP_SUMMARY
-        echo \`\`\` >> $GITHUB_STEP_SUMMARY

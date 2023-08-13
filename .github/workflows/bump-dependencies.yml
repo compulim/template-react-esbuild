@@ -51,6 +51,16 @@ jobs:
           fi
 
       - if: ${{ steps.get-changes.outputs.has-changes == 'true' }}
+        name: Summarize changes
+        run: |
+          git show :package.json | jq '{ dependencies: .dependencies, devDependences: .devDependencies }' > /tmp/current.json
+          cat package.json | jq '{ dependencies: .dependencies, devDependences: .devDependencies }' > /tmp/next.json
+
+          echo \`\`\`diff >> $GITHUB_STEP_SUMMARY
+          diff -U 9999 /tmp/current.json /tmp/next.json >> $GITHUB_STEP_SUMMARY || true
+          echo \`\`\` >> $GITHUB_STEP_SUMMARY
+
+      - if: ${{ steps.get-changes.outputs.has-changes == 'true' }}
         name: Commit and push
         run: |
           git config user.email "${{ format('@{0}', github.actor) }}"
