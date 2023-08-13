@@ -94,8 +94,8 @@ jobs:
         run: |
           cd ./current
 
-          git config user.email "${{ format('@{0}', github.actor) }}"
-          git config user.name "${{ format('@{0}', github.actor) }}"
+          git config user.email "${{ github.actor }}@users.noreply.github.com"
+          git config user.name "@${{ github.actor }}"
 
           git add .
           git commit -a -m "Bump scaffold"
