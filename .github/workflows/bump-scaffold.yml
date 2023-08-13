@@ -19,29 +19,25 @@ on:
 
 jobs:
   bump-scaffold:
-    # environment:
-    #   name: admin
-    #   url: ${{ steps.summary.outputs.url }}
+    environment:
+      name: admin
+      url: ${{ steps.summary.outputs.url }}
     name: Bump scaffold
-    permissions:
-      actions: write
-      contents: write
-      pull-requests: write
     runs-on: ubuntu-latest
 
     steps:
-      # - name: Validate environment
-      #   run: |
-      #     if [ -z "${{ secrets.GH_TOKEN }}" ]
-      #     then
-      #       exit 1
-      #     fi
+      - name: Validate environment
+        run: |
+          if [ -z "${{ secrets.GH_TOKEN }}" ]
+          then
+            exit 1
+          fi
 
       - name: Check out current
         uses: actions/checkout@v3
         with:
           path: ./current
-          # token: ${{ secrets.GH_TOKEN }}
+          token: ${{ secrets.GH_TOKEN }}
 
       - env:
           GH_TOKEN: ${{ github.token }}
@@ -111,8 +107,7 @@ jobs:
           echo Branch created at [\`${{ steps.create-branch.outputs.branch-name }}\`]\($URL\). >> $GITHUB_STEP_SUMMARY
 
       - env:
-          # GH_TOKEN: ${{ secrets.GH_TOKEN }}
-          GH_TOKEN: ${{ github.token }}
+          GH_TOKEN: ${{ secrets.GH_TOKEN }}
         id: create-pull-request
         if: ${{ steps.get-changes.outputs.has-changes == 'true' }}
         name: Create pull request
