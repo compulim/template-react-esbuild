@@ -3,7 +3,7 @@ name: Pull request validation
 
 on:
   # Runs on pushes targeting the default branch
-  pull-request:
+  pull_request:
     branches:
       - main
 
