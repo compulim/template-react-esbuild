@@ -1,7 +1,13 @@
 name: Bump dependencies
 
 on:
-  workflow_dispatch: {}
+  workflow_dispatch:
+    inputs:
+      exact-prod:
+        default: false
+        description: Exact version for production dependencies
+        required: true
+        type: boolean
 
 jobs:
   bump-dependencies:
@@ -23,13 +29,14 @@ jobs:
           git checkout -b $BRANCH_NAME
           echo branch-name=$BRANCH_NAME >> $GITHUB_OUTPUT
 
-      - run: npm run bump
+      - env:
+          BUMP_DEV_OPTIONS: ''
+          BUMP_PROD_OPTIONS: ${{ inputs.exact-prod && '--save-exact' || '' }}
+        run: npm run bump
 
       - id: get-changes
         name: Get changes
         run: |
-          cd ./current/
-
           if [[ `git ls-files --deleted --modified --others | wc -l` -gt 0 ]]
           then
             echo has-changes=true >> $GITHUB_OUTPUT
@@ -38,8 +45,6 @@ jobs:
       - if: ${{ steps.get-changes.outputs.has-changes == 'true' }}
         name: Commit and push
         run: |
-          cd ./current
-
           git config user.email "${{ format('@{0}', github.actor) }}"
           git config user.name "${{ format('@{0}', github.actor) }}"
 
@@ -53,8 +58,6 @@ jobs:
         if: ${{ steps.get-changes.outputs.has-changes == 'true' }}
         name: Create pull request
         run: |
-          cd ./current
-
           URL=`gh pr create --fill --repo ${{ github.repository }} || true` >> $GITHUB_OUTPUT
 
           if [[ ! -z "$URL" ]]
