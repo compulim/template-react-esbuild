@@ -1,0 +1,14 @@
+# Simple workflow for validating pull request
+name: Pull request validation
+
+on:
+  # Runs on pushes targeting the default branch
+  pull-request:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: ./.github/actions/build-pages
