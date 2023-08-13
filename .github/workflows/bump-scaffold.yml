@@ -89,6 +89,7 @@ jobs:
             echo has-changes=true >> $GITHUB_OUTPUT
           fi
 
+      - id: commit-and-push
         if: ${{ steps.get-changes.outputs.has-changes == 'true' }}
         name: Commit and push
         run: |
