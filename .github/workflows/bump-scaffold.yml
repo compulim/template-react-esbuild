@@ -82,13 +82,13 @@ jobs:
           cd ./current/
 
           git status
+          git ls-files --deleted --exclude-from=./.gitignore --modified --others
 
-          if [[ `git ls-files --deleted --modified --others | wc -l` -gt 0 ]]
+          if [[ `git ls-files --deleted --exclude-from=./.gitignore --modified --others | wc -l` -gt 0 ]]
           then
             echo has-changes=true >> $GITHUB_OUTPUT
           fi
 
-      - id: commit-and-push
         if: ${{ steps.get-changes.outputs.has-changes == 'true' }}
         name: Commit and push
         run: |
