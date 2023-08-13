@@ -34,7 +34,7 @@ jobs:
       - id: create-branch
         name: Create branch
         run: |
-          BRANCH_NAME=bump-scaffold-${{ github.run_number }}
+          BRANCH_NAME=bot/bump-scaffold/${{ github.run_number }}
 
           cd ./current/
           git checkout -b $BRANCH_NAME
