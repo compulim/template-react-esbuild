@@ -31,7 +31,7 @@ runs:
     - env:
         VERSION_TAG: ${{ inputs.latest == 'true' && '@latest' || '' }}
       name: Run npm install for development
-      run: npm install --save-dev ${{ inputs.exact-prod && '--save-exact' || '' }} concurrently${{ env.VERSION_TAG }} esbuild${{ env.VERSION_TAG }} eslint${{ env.VERSION_TAG }} eslint-plugin-prettier${{ env.VERSION_TAG }} eslint-plugin-react${{ env.VERSION_TAG }} typescript${{ env.VERSION_TAG }} @types/react${{ env.VERSION_TAG }} @types/react-dom${{ env.VERSION_TAG }} @typescript-eslint/eslint-plugin${{ env.VERSION_TAG }} @typescript-eslint/parser${{ env.VERSION_TAG }}
+      run: npm install --save-dev ${{ inputs.exact-prod == 'true' && '--save-exact' || '' }} concurrently${{ env.VERSION_TAG }} esbuild${{ env.VERSION_TAG }} eslint${{ env.VERSION_TAG }} eslint-plugin-prettier${{ env.VERSION_TAG }} eslint-plugin-react${{ env.VERSION_TAG }} typescript${{ env.VERSION_TAG }} @types/react${{ env.VERSION_TAG }} @types/react-dom${{ env.VERSION_TAG }} @typescript-eslint/eslint-plugin${{ env.VERSION_TAG }} @typescript-eslint/parser${{ env.VERSION_TAG }}
       shell: bash
       working-directory: ${{ inputs.path }}
 
