@@ -1,14 +1,22 @@
 name: Bump scaffold
 
+# To run this workflow:
+#
+# - Creates an environment named "admin"
+# - Adds a secret named GH_TOKEN with the following permissions to this repository:
+#   - contents: write
+#   - pull-requests: write
+#   - workflows: write
+
 on:
   workflow_dispatch: {}
 
 jobs:
   bump-scaffold:
+    environment:
+      name: admin
+      url: ${{ steps.summary.outputs.url }}
     name: Bump scaffold
-    permissions:
-      contents: write
-      pull-requests: write
     runs-on: ubuntu-latest
 
     steps:
@@ -16,6 +24,7 @@ jobs:
         uses: actions/checkout@v3
         with:
           path: ./current
+          token: ${{ secrets.GH_TOKEN }}
 
       - env:
           GH_TOKEN: ${{ github.token }}
@@ -41,7 +50,7 @@ jobs:
           echo branch-name=$BRANCH_NAME >> $GITHUB_OUTPUT
 
       - name: Copy scaffold files
-        run: rsync ./template/* ./current/ --exclude=.git/ --exclude=.gitignore --exclude=.github/workflows/set-up-scaffold.yml --exclude=.eslintrc.yml --exclude=package.json --exclude=public/ --exclude=README.* --exclude=src/ --include=src/tsconfig.json
+        run: rsync --exclude=.git/ --exclude=.github/workflows/set-up-scaffold.yml --exclude=package.json --exclude=public/ --exclude=README.* --exclude=src/ --include=src/tsconfig.json --recursive --verbose ./template/ ./current/
 
       - name: Patch package.json/scripts
         run: |
@@ -54,12 +63,15 @@ jobs:
         run: |
           cd ./current/
 
+          git status
+
           if [[ `git ls-files --deleted --modified --others | wc -l` -gt 0 ]]
           then
             echo has-changes=true >> $GITHUB_OUTPUT
           fi
 
-      - if: ${{ steps.get-changes.outputs.has-changes == 'true' }}
+      - id: commit-and-push
+        if: ${{ steps.get-changes.outputs.has-changes == 'true' }}
         name: Commit and push
         run: |
           cd ./current
@@ -67,13 +79,18 @@ jobs:
           git config user.email "${{ format('@{0}', github.actor) }}"
           git config user.name "${{ format('@{0}', github.actor) }}"
 
+          git add .
           git commit -a -m "Bump scaffold"
           git push -u origin ${{ steps.create-branch.outputs.branch-name }}
 
-          echo Branch created at [\`${{ steps.create-branch.outputs.branch-name }}\`]\(${{ github.server }}/${{ github.repository }}/compare/${{ steps.create-branch.outputs.branch-name }}?expand=1\). >> $GITHUB_STEP_SUMMARY
+          URL=${{ github.server_url }}/${{ github.repository }}/compare/${{ steps.create-branch.outputs.branch-name }}?expand=1
+          echo url=$URL >> $GITHUB_OUTPUT
+
+          echo Branch created at [\`${{ steps.create-branch.outputs.branch-name }}\`]\($URL\). >> $GITHUB_STEP_SUMMARY
 
       - env:
-          GH_TOKEN: ${{ github.token }}
+          GH_TOKEN: ${{ secrets.GH_TOKEN }}
+        id: create-pull-request
         if: ${{ steps.get-changes.outputs.has-changes == 'true' }}
         name: Create pull request
         run: |
@@ -83,5 +100,11 @@ jobs:
 
           if [[ ! -z "$URL" ]]
           then
+            echo url=$URL >> $GITHUB_OUTPUT
             echo Pull request created at $URL. >> $GITHUB_STEP_SUMMARY
           fi
+
+      - id: summary
+        if: ${{ steps.get-changes.outputs.has-changes == 'true' }}
+        name: Summary
+        run: echo url=${{ steps.create-pull-request.outputs.url || steps.commit-and-push.outputs.url }} >> $GITHUB_OUTPUT

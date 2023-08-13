@@ -24,7 +24,7 @@ jobs:
       - id: create-branch
         name: Create branch
         run: |
-          BRANCH_NAME=bot/bump-deps/${{ github.run_number }}
+          BRANCH_NAME=bump-deps-${{ github.run_number }}
 
           git checkout -b $BRANCH_NAME
           echo branch-name=$BRANCH_NAME >> $GITHUB_OUTPUT
@@ -51,7 +51,7 @@ jobs:
           git commit -a -m "Bump dependencies"
           git push -u origin ${{ steps.create-branch.outputs.branch-name }}
 
-          echo Branch created at [\`${{ steps.create-branch.outputs.branch-name }}\`]\(${{ github.server }}/${{ github.repository }}/compare/${{ steps.create-branch.outputs.branch-name }}?expand=1\). >> $GITHUB_STEP_SUMMARY
+          echo Branch created at [\`${{ steps.create-branch.outputs.branch-name }}\`]\(${{ github.server_url }}/${{ github.repository }}/compare/${{ steps.create-branch.outputs.branch-name }}?expand=1\). >> $GITHUB_STEP_SUMMARY
 
       - env:
           GH_TOKEN: ${{ github.token }}
