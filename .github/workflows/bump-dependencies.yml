@@ -5,7 +5,7 @@ on:
     inputs:
       exact-prod:
         default: false
-        description: Exact version for production dependencies
+        description: Install exact version for production dependencies
         required: true
         type: boolean
 
@@ -29,10 +29,16 @@ jobs:
           git checkout -b $BRANCH_NAME
           echo branch-name=$BRANCH_NAME >> $GITHUB_OUTPUT
 
+      - uses: ./.github/actions/install-default-deps
+        with:
+          exact-prod: ${{ inputs.exact-prod }}
+
       - env:
           BUMP_DEV_OPTIONS: ''
           BUMP_PROD_OPTIONS: ${{ inputs.exact-prod && '--save-exact' || '' }}
         run: npm run bump
+
+      - run: npm audit fix
 
       - id: get-changes
         name: Get changes
