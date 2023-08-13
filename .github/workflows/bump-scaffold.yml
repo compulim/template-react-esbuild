@@ -71,7 +71,7 @@ jobs:
           mv ./current/package.json.tmp ./current/package.json
           cat ./current/package.json
 
-      - uses: ./.github/actions/install-default-deps
+      - uses: ./current/.github/actions/install-default-deps
         with:
           exact-prod: ${{ inputs.exact-prod }}
           path: ./current/
