@@ -4,6 +4,7 @@
     "esModuleInterop": true,
     "jsx": "react-jsx",
     "lib": ["DOM", "ESNext", "WebWorker"],
+    "module": "NodeNext",
     "moduleResolution": "NodeNext",
     "noEmit": true,
     "preserveWatchOutput": true,

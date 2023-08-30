@@ -19,6 +19,9 @@ jobs:
   build:
     if: ${{ github.event_name != 'push' || (github.run_number > 1 && github.repository != 'compulim/template-react-esbuild') }}
     name: Build
+    permissions:
+      contents: read
+      pages: write
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
