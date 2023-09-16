@@ -9,7 +9,7 @@
     "noEmit": true,
     "preserveWatchOutput": true,
     "skipLibCheck": true,
-    "strict": true,
     "target": "ESNext"
-  }
+  },
+  "extends": "@tsconfig/strictest"
 }

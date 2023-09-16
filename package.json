@@ -15,5 +15,8 @@
     "precommit:eslint": "eslint ./src/",
     "precommit:typescript": "tsc --project ./src/tsconfig.json",
     "start": "npm run build -- --servedir=./public"
+  },
+  "dependencies": {
+    "@tsconfig/strictest": "^2.0.2"
   }
 }
