@@ -6,7 +6,7 @@
     "template-react-esbuild"
   ],
   "scripts": {
-    "build": "esbuild --bundle --entry-names=[ext]/[name] --jsx=automatic --minify --outdir=./public/static/ --sourcemap app=./src/app/index.tsx",
+    "build": "esbuild --bundle --define:IS_DEVELOPMENT=false --entry-names=[ext]/[name] --jsx=automatic --minify --outdir=./public/static/ --sourcemap app=./src/app/index.tsx",
     "bump": "npm run bump:prod && npm run bump:dev",
     "bump:dev": "if [ `cat package.json | jq -r '.devDependencies | length'` -ne 0 ]; then npm install $BUMP_DEV_OPTIONS $(cat package.json | jq -r '(.pinDependencies // {}) as $p | ((.devDependencies // {}) | keys) | map(. + \"@\" + ($p[.] // [\"latest\"])[0]) | .[]'); fi",
     "bump:prod": "if [ `cat package.json | jq -r '.dependencies | length'` -ne 0 ]; then npm install $BUMP_PROD_OPTIONS $(cat package.json | jq -r '(.pinDependencies // {}) as $p | ((.dependencies // {}) | keys) | map(. + \"@\" + ($p[.] // [\"latest\"])[0]) | .[]'); fi",
@@ -14,6 +14,6 @@
     "precommit": "npm run precommit:eslint && npm run precommit:typescript",
     "precommit:eslint": "eslint ./src/",
     "precommit:typescript": "tsc --project ./src/tsconfig.json",
-    "start": "npm run build -- --servedir=./public"
+    "start": "npm run build -- --define:IS_DEVELOPMENT=true --servedir=./public --watch"
   }
 }
