@@ -34,7 +34,7 @@ jobs:
           fi
 
       - name: Check out current
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           path: ./current
           token: ${{ secrets.GH_TOKEN }}
@@ -48,7 +48,7 @@ jobs:
           echo repo=`gh repo view --json templateRepository --jq '.templateRepository.owner.login + "/" + .templateRepository.name'` >> $GITHUB_OUTPUT
 
       - name: Check out template
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           path: ./template
           repository: ${{ steps.get-template-repo.outputs.repo }}
